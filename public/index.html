@@ -2,30 +2,182 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Isim Sorgulama</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>İsim İstatistik Sorgulama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      background: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      background: #1e293b;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 440px;
+      border: 1px solid #334155;
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    p.subtitle {
+      color: #94a3b8;
+      font-size: 0.875rem;
+      margin-bottom: 24px;
+    }
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    input {
+      flex: 1;
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 12px 16px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus {
+      border-color: #38bdf8;
+    }
+    button {
+      background: #38bdf8;
+      color: #0f172a;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #7dd3fc;
+    }
+    .results {
+      display: grid;
+      gap: 12px;
+    }
+    .stat-box {
+      background: #0f172a;
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid #1e293b;
+    }
+    .stat-label {
+      color: #94a3b8;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+    .hidden {
+      display: none;
+    }
+    .error {
+      color: #f87171;
+      font-size: 0.875rem;
+      margin-top: 12px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <input type="text" id="isimInput" placeholder="Isim yazin...">
-  <button id="sorgulaBtn">Sorgula</button>
-  <div id="sonuc"></div>
+
+  <div class="card">
+    <h2>İsim Sorgulama</h2>
+    <p class="subtitle">Türkiye genelinde ve İstanbul'da isim istatistikleri</p>
+
+    <div class="input-group">
+      <input type="text" id="isimInput" placeholder="Örn: Ömer" autocomplete="off">
+      <button id="sorgulaBtn">Sorgula</button>
+    </div>
+
+    <div id="loading" class="hidden" style="text-align: center; color: #94a3b8;">Aranıyor...</div>
+    <div id="error" class="error hidden"></div>
+
+    <div id="results" class="results hidden">
+      <div class="stat-box">
+        <div class="stat-label">Sorgulanan İsim</div>
+        <div class="stat-value" id="resIsim" style="color: #fff;">-</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">İstanbul Kişi Sayısı</div>
+        <div class="stat-value" id="resIl">-</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Türkiye Genel Sayısı</div>
+        <div class="stat-value" id="resTurkiye">-</div>
+      </div>
+    </div>
+  </div>
 
   <script>
-    document.getElementById('sorgulaBtn').addEventListener('click', async () => {
-      const isim = document.getElementById('isimInput').value.trim();
-      const sonucDiv = document.getElementById('sonuc');
+    const btn = document.getElementById('sorgulaBtn');
+    const input = document.getElementById('isimInput');
+    const loading = document.getElementById('loading');
+    const error = document.getElementById('error');
+    const results = document.getElementById('results');
+
+    async function sorgula() {
+      const isim = input.value.trim();
       if (!isim) return;
-      sonucDiv.innerText = 'Sorgulaniyor...';
+
+      error.classList.add('hidden');
+      results.classList.add('hidden');
+      loading.classList.remove('hidden');
+
       try {
         const res = await fetch(`/api/sorgula?isim=${encodeURIComponent(isim)}&ilKodu=34`);
         const data = await res.json();
+
+        loading.classList.add('hidden');
+
         if (data.error) {
-          sonucDiv.innerText = 'Hata olustu.';
+          error.innerText = data.error;
+          error.classList.remove('hidden');
           return;
         }
-        sonucDiv.innerHTML = `<h3>${data.isim}</h3><p>Istanbul: <strong>${data.ilToplam}</strong></p><p>Turkiye: <strong>${data.turkiyeToplam}</strong></p>`;
+
+        document.getElementById('resIsim').innerText = data.isim;
+        document.getElementById('resIl').innerText = data.ilToplam.toLocaleString('tr-TR');
+        document.getElementById('resTurkiye').innerText = data.turkiyeToplam.toLocaleString('tr-TR');
+
+        results.classList.remove('hidden');
       } catch (e) {
-        sonucDiv.innerText = 'Baglanti hatasi.';
+        loading.classList.add('hidden');
+        error.innerText = 'Bağlantı kurulurken bir hata oluştu.';
+        error.classList.remove('hidden');
       }
+    }
+
+    btn.addEventListener('click', sorgula);
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sorgula();
     });
   </script>
 </body>
