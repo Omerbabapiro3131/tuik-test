@@ -1,1 +1,32 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Isim Sorgulama</title>
+</head>
+<body>
+  <input type="text" id="isimInput" placeholder="Isim yazin...">
+  <button id="sorgulaBtn">Sorgula</button>
+  <div id="sonuc"></div>
 
+  <script>
+    document.getElementById('sorgulaBtn').addEventListener('click', async () => {
+      const isim = document.getElementById('isimInput').value.trim();
+      const sonucDiv = document.getElementById('sonuc');
+      if (!isim) return;
+      sonucDiv.innerText = 'Sorgulaniyor...';
+      try {
+        const res = await fetch(`/api/sorgula?isim=${encodeURIComponent(isim)}&ilKodu=34`);
+        const data = await res.json();
+        if (data.error) {
+          sonucDiv.innerText = 'Hata olustu.';
+          return;
+        }
+        sonucDiv.innerHTML = `<h3>${data.isim}</h3><p>Istanbul: <strong>${data.ilToplam}</strong></p><p>Turkiye: <strong>${data.turkiyeToplam}</strong></p>`;
+      } catch (e) {
+        sonucDiv.innerText = 'Baglanti hatasi.';
+      }
+    });
+  </script>
+</body>
+</html>
