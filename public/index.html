@@ -59,7 +59,7 @@
       box-shadow: 0 0 8px #38bdf8;
     }
     
-    /* YouTube Sayacı / Odometer Animasyon Stilleri */
+    /* Düzeltilmiş Odometer / Sayaç Stilleri */
     .live-counter {
       font-size: 2.25rem;
       font-weight: 800;
@@ -68,9 +68,10 @@
       letter-spacing: -1px;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       overflow: hidden;
       height: 48px;
+      line-height: 48px;
     }
     .digit-col {
       display: inline-flex;
@@ -81,6 +82,12 @@
       height: 48px;
       line-height: 48px;
       text-align: center;
+      display: block;
+    }
+    .separator {
+      height: 48px;
+      line-height: 48px;
+      display: inline-block;
     }
 
     h2 {
@@ -311,7 +318,6 @@
   </div>
 
   <script>
-    // YouTube Abone Sayacı Geçiş Efekti Mantığı
     const baseNufus = 85372377;
     const baseDate = new Date('2024-01-01T00:00:00').getTime();
     const counterEl = document.getElementById('nufusSayac');
@@ -321,6 +327,7 @@
       for (let char of valStr) {
         if (char === '.' || char === ',') {
           const sep = document.createElement('span');
+          sep.className = 'separator';
           sep.innerText = char;
           counterEl.appendChild(sep);
         } else {
@@ -365,7 +372,6 @@
     setInterval(nufusGuncelle, 1000);
     nufusGuncelle();
 
-    // Neden Soyad Sorgu Yok Buton Mantığı
     const whySoyadBtn = document.getElementById('whySoyadBtn');
     const soyadInfo = document.getElementById('soyadInfo');
 
@@ -373,7 +379,6 @@
       soyadInfo.classList.toggle('hidden');
     });
 
-    // İsim Sorgulama Mantığı
     const btn = document.getElementById('sorgulaBtn');
     const input = document.getElementById('isimInput');
     const ilSelect = document.getElementById('ilSelect');
