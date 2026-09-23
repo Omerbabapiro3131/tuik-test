@@ -3,10 +3,28 @@ const path = require('path');
 
 const app = express();
 
+const SUPABASE_URL = 'https://qgvabxabrwngegsgzkcn.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_21ozdIvq0BA1IWC6m87ESQ_VZBkAymZ';
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/api/toplam-sorgu', async (req, res) => {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/sayac?id=eq.1&select=toplam`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`
+      }
+    });
+    const data = await response.json();
+    return res.json({ toplam: data[0]?.toplam || 0 });
+  } catch (err) {
+    return res.status(500).json({ error: 'Veritabanı hatası' });
+  }
 });
 
 app.get('/api/sorgula', async (req, res) => {
@@ -47,6 +65,30 @@ app.get('/api/sorgula', async (req, res) => {
     };
 
     const [erkek, kadin] = await Promise.all([fetchSorgu(1), fetchSorgu(2)]);
+
+    try {
+      const getRes = await fetch(`${SUPABASE_URL}/rest/v1/sayac?id=eq.1&select=toplam`, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+      });
+      const getData = await getRes.json();
+      const mevcutToplam = getData[0]?.toplam || 0;
+
+      await fetch(`${SUPABASE_URL}/rest/v1/sayac?id=eq.1`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ toplam: mevcutToplam + 1 })
+      });
+    } catch (e) {
+      console.error('Sayaç güncellenemedi:', e);
+    }
 
     res.json({
       isim: formatliIsim,
