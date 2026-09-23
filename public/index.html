@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>İsim İstatistik Sorgulama</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Firebase / Realtime Ortak Sayaç Kütüphaneleri -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <style>
     * {
@@ -315,10 +311,10 @@
       </div>
     </div>
 
-    <!-- Herkes İçin Ortak Toplam Sorgu Kutusu -->
+    <!-- Ortak Toplam Sorgu Kutusu -->
     <div class="stat-box" style="margin-top: 16px; text-align: center;">
       <div class="stat-label">TOPLAM YAPILAN SORGU</div>
-      <div class="stat-value" id="toplamSorguSayac" style="font-size: 1.5rem; color: #38bdf8;">...</div>
+      <div class="stat-value" id="toplamSorguSayac" style="font-size: 1.5rem; color: #38bdf8;">0</div>
     </div>
 
   </div>
@@ -379,29 +375,41 @@
     setInterval(nufusGuncelle, 1000);
     nufusGuncelle();
 
-    // HERKES İÇİN ORTAK CANLI SAYAÇ (Firebase Realtime Database)
-    const firebaseConfig = {
-      databaseURL: "https://ismimkactane-default-rtdb.europe-west1.firebasedatabase.app"
-    };
+    // HERKES İÇİN ORTAK CANLI SAYAÇ (CountAPI - Sadece HTML)
+    const namespace = "ismimkactane-app-2026";
+    const key = "toplam_sorgu_sayisi";
 
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+    async function ortakSayaciGetir() {
+      try {
+        const res = await fetch(`https://api.countapi.xyz/get/${namespace}/${key}`);
+        const data = await res.json();
+        if (data && data.value !== undefined) {
+          document.getElementById('toplamSorguSayac').innerText = data.value.toLocaleString('tr-TR');
+        } else {
+          // Key yoksa oluşturur
+          const createRes = await fetch(`https://api.countapi.xyz/create?namespace=${namespace}&key=${key}&value=0`);
+          const createData = await createRes.json();
+          document.getElementById('toplamSorguSayac').innerText = (createData.value || 0).toLocaleString('tr-TR');
+        }
+      } catch (e) {
+        console.error("Sayaç yüklenemedi", e);
+      }
     }
-    const db = firebase.database();
-    const sorguRef = db.ref('toplam_sorgu');
 
-    // Herkesin ekranında canlı olarak sayıyı günceller
-    sorguRef.on('value', (snapshot) => {
-      const val = snapshot.val() || 0;
-      document.getElementById('toplamSorguSayac').innerText = val.toLocaleString('tr-TR');
-    });
-
-    // Biri sorgula butonuna basınca veritabanındaki ortak sayıyı 1 artırır
-    function ortakSayayiArttir() {
-      sorguRef.transaction((currentValue) => {
-        return (currentValue || 0) + 1;
-      });
+    async function ortakSayaciArttir() {
+      try {
+        const res = await fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+        const data = await res.json();
+        if (data && data.value !== undefined) {
+          document.getElementById('toplamSorguSayac').innerText = data.value.toLocaleString('tr-TR');
+        }
+      } catch (e) {
+        console.error("Sayaç artırılamadı", e);
+      }
     }
+
+    // Sayfa açıldığında ortak sayıyı yükle
+    ortakSayaciGetir();
 
     // Arayüz Mantığı
     const whySoyadBtn = document.getElementById('whySoyadBtn');
@@ -448,8 +456,8 @@
 
         results.classList.remove('hidden');
         
-        // ORTAK SAYAÇ 1 ARTTIRILIR
-        ortakSayayiArttir();
+        // Sorgulama yapıldığında ortak sayaç 1 artırılır
+        ortakSayaciArttir();
 
       } catch (e) {
         loading.classList.add('hidden');
