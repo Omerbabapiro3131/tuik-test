@@ -314,7 +314,7 @@
     <!-- Ortak Toplam Sorgu Kutusu -->
     <div class="stat-box" style="margin-top: 16px; text-align: center;">
       <div class="stat-label">TOPLAM YAPILAN SORGU</div>
-      <div class="stat-value" id="toplamSorguSayac" style="font-size: 1.5rem; color: #38bdf8;">0</div>
+      <div class="stat-value" id="toplamSorguSayac" style="font-size: 1.5rem; color: #38bdf8;">Yükleniyor...</div>
     </div>
 
   </div>
@@ -375,40 +375,37 @@
     setInterval(nufusGuncelle, 1000);
     nufusGuncelle();
 
-    // HERKES İÇİN ORTAK CANLI SAYAÇ (CountAPI - Sadece HTML)
-    const namespace = "ismimkactane-app-2026";
-    const key = "toplam_sorgu_sayisi";
+    // CANLI SAYAÇ (Abacus API)
+    const namespace = "ismimkactane_projesi_2026";
+    const key = "toplam_sorgu";
 
+    // Sayıyı getirme fonksiyonu
     async function ortakSayaciGetir() {
       try {
-        const res = await fetch(`https://api.countapi.xyz/get/${namespace}/${key}`);
+        const res = await fetch(`https://abacus.jasoncameron.dev/get/${namespace}/${key}`);
         const data = await res.json();
         if (data && data.value !== undefined) {
-          document.getElementById('toplamSorguSayac').innerText = data.value.toLocaleString('tr-TR');
-        } else {
-          // Key yoksa oluşturur
-          const createRes = await fetch(`https://api.countapi.xyz/create?namespace=${namespace}&key=${key}&value=0`);
-          const createData = await createRes.json();
-          document.getElementById('toplamSorguSayac').innerText = (createData.value || 0).toLocaleString('tr-TR');
+          document.getElementById('toplamSorguSayac').innerText = Number(data.value).toLocaleString('tr-TR');
         }
       } catch (e) {
-        console.error("Sayaç yüklenemedi", e);
+        console.error("Sayaç yükleme hatası:", e);
       }
     }
 
+    // Sayıyı 1 artırma fonksiyonu
     async function ortakSayaciArttir() {
       try {
-        const res = await fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+        const res = await fetch(`https://abacus.jasoncameron.dev/hit/${namespace}/${key}`);
         const data = await res.json();
         if (data && data.value !== undefined) {
-          document.getElementById('toplamSorguSayac').innerText = data.value.toLocaleString('tr-TR');
+          document.getElementById('toplamSorguSayac').innerText = Number(data.value).toLocaleString('tr-TR');
         }
       } catch (e) {
-        console.error("Sayaç artırılamadı", e);
+        console.error("Sayaç artırma hatası:", e);
       }
     }
 
-    // Sayfa açıldığında ortak sayıyı yükle
+    // Sayfa ilk yüklendiğinde mevcut ortak sayıyı çek
     ortakSayaciGetir();
 
     // Arayüz Mantığı
@@ -456,7 +453,7 @@
 
         results.classList.remove('hidden');
         
-        // Sorgulama yapıldığında ortak sayaç 1 artırılır
+        // Sorgulama gerçekleşince ortak sayıyı 1 artır
         ortakSayaciArttir();
 
       } catch (e) {
