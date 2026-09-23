@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>İsim İstatistik Sorgulama</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Firebase / Realtime Ortak Sayaç Kütüphaneleri -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -58,7 +63,6 @@
       border-radius: 50%;
       box-shadow: 0 0 8px #38bdf8;
     }
-    
     .live-counter {
       font-size: 2.25rem;
       font-weight: 800;
@@ -88,7 +92,6 @@
       line-height: 48px;
       display: inline-block;
     }
-
     h2 {
       font-size: 1.5rem;
       font-weight: 700;
@@ -134,7 +137,6 @@
     button:hover {
       background: #7dd3fc;
     }
-    
     .why-soyad-btn {
       background: #334155;
       color: #f8fafc;
@@ -144,7 +146,6 @@
     .why-soyad-btn:hover {
       background: #475569;
     }
-
     .soyad-info-box {
       margin-top: 12px;
       padding: 12px;
@@ -156,7 +157,6 @@
       font-weight: 600;
       text-align: center;
     }
-
     .results {
       display: grid;
       gap: 12px;
@@ -315,16 +315,16 @@
       </div>
     </div>
 
-    <!-- Toplam Yapılan Sorgu Kutusu -->
+    <!-- Herkes İçin Ortak Toplam Sorgu Kutusu -->
     <div class="stat-box" style="margin-top: 16px; text-align: center;">
-      <div class="stat-label">ŞU ANA KADAR YAPILAN SORGU</div>
-      <div class="stat-value" id="toplamSorguSayac" style="font-size: 1.5rem; color: #38bdf8;">0</div>
+      <div class="stat-label">TOPLAM YAPILAN SORGU</div>
+      <div class="stat-value" id="toplamSorguSayac" style="font-size: 1.5rem; color: #38bdf8;">...</div>
     </div>
 
   </div>
 
   <script>
-    // Nüfus Sayacı Mantığı
+    // Canlı Nüfus Sayacı
     const baseNufus = 85372377;
     const baseDate = new Date('2024-01-01T00:00:00').getTime();
     const counterEl = document.getElementById('nufusSayac');
@@ -379,28 +379,31 @@
     setInterval(nufusGuncelle, 1000);
     nufusGuncelle();
 
-    // Toplam Sorgu Sayacı Mantığı (localStorage)
-    const toplamSorguEl = document.getElementById('toplamSorguSayac');
-    
-    function sorguSayisiniYukle() {
-      let kayitliSorgu = localStorage.getItem('toplam_sorgu_sayisi');
-      if (!kayitliSorgu) {
-        kayitliSorgu = 0;
-        localStorage.setItem('toplam_sorgu_sayisi', 0);
-      }
-      toplamSorguEl.innerText = parseInt(kayitliSorgu, 10).toLocaleString('tr-TR');
+    // HERKES İÇİN ORTAK CANLI SAYAÇ (Firebase Realtime Database)
+    const firebaseConfig = {
+      databaseURL: "https://ismimkactane-default-rtdb.europe-west1.firebasedatabase.app"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+    const sorguRef = db.ref('toplam_sorgu');
+
+    // Herkesin ekranında canlı olarak sayıyı günceller
+    sorguRef.on('value', (snapshot) => {
+      const val = snapshot.val() || 0;
+      document.getElementById('toplamSorguSayac').innerText = val.toLocaleString('tr-TR');
+    });
+
+    // Biri sorgula butonuna basınca veritabanındaki ortak sayıyı 1 artırır
+    function ortakSayayiArttir() {
+      sorguRef.transaction((currentValue) => {
+        return (currentValue || 0) + 1;
+      });
     }
 
-    function sorguSayisiniArttir() {
-      let mevcut = parseInt(localStorage.getItem('toplam_sorgu_sayisi') || '0', 10);
-      mevcut += 1;
-      localStorage.setItem('toplam_sorgu_sayisi', mevcut);
-      toplamSorguEl.innerText = mevcut.toLocaleString('tr-TR');
-    }
-
-    sorguSayisiniYukle();
-
-    // Buton Mantığı
+    // Arayüz Mantığı
     const whySoyadBtn = document.getElementById('whySoyadBtn');
     const soyadInfo = document.getElementById('soyadInfo');
 
@@ -445,8 +448,8 @@
 
         results.classList.remove('hidden');
         
-        // Sorgu başarılı olduğunda sayacı 1 artır
-        sorguSayisiniArttir();
+        // ORTAK SAYAÇ 1 ARTTIRILIR
+        ortakSayayiArttir();
 
       } catch (e) {
         loading.classList.add('hidden');
