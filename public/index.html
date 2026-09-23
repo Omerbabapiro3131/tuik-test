@@ -3,470 +3,296 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>İsim İstatistik Sorgulama</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+  <title>İsim Sorgulama</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Inter', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
+
     body {
-      background: #0f172a;
+      background-color: #0f172a;
       color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
       padding: 20px;
-      gap: 20px;
     }
-    .card {
-      background: #1e293b;
-      padding: 32px;
+
+    .container {
+      background-color: #1e293b;
+      padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
       width: 100%;
-      max-width: 440px;
-      border: 1px solid #334155;
+      max-width: 450px;
     }
-    .live-card {
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      border: 1px solid #38bdf840;
+
+    h1 {
       text-align: center;
-    }
-    .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #38bdf820;
-      color: #38bdf8;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .dot {
-      width: 8px;
-      height: 8px;
-      background: #38bdf8;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #38bdf8;
-    }
-    .live-counter {
-      font-size: 2.25rem;
-      font-weight: 800;
-      color: #fff;
-      font-family: monospace;
-      letter-spacing: -1px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      overflow: hidden;
-      height: 48px;
-      line-height: 48px;
-    }
-    .digit-col {
-      display: inline-flex;
-      flex-direction: column;
-      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .digit-col span {
-      height: 48px;
-      line-height: 48px;
-      text-align: center;
-      display: block;
-    }
-    .separator {
-      height: 48px;
-      line-height: 48px;
-      display: inline-block;
-    }
-    h2 {
       font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: #fff;
+      margin-bottom: 20px;
+      color: #38bdf8;
     }
-    p.subtitle {
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
       color: #94a3b8;
-      font-size: 0.875rem;
-      margin-bottom: 24px;
     }
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
+
     input, select {
       width: 100%;
-      background: #0f172a;
-      border: 1px solid #334155;
-      padding: 12px 16px;
+      padding: 12px;
       border-radius: 8px;
+      border: 1px solid #334155;
+      background-color: #0f172a;
       color: #fff;
-      font-size: 0.95rem;
+      font-size: 1rem;
       outline: none;
-      transition: border-color 0.2s;
     }
+
     input:focus, select:focus {
       border-color: #38bdf8;
     }
+
     button {
-      background: #38bdf8;
-      color: #0f172a;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
       width: 100%;
-    }
-    button:hover {
-      background: #7dd3fc;
-    }
-    .why-soyad-btn {
-      background: #334155;
-      color: #f8fafc;
-      margin-top: 16px;
-      font-size: 0.85rem;
-    }
-    .why-soyad-btn:hover {
-      background: #475569;
-    }
-    .soyad-info-box {
-      margin-top: 12px;
       padding: 12px;
-      background: #0f172a;
-      border: 1px dashed #38bdf8;
       border-radius: 8px;
-      color: #38bdf8;
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-align: center;
+      border: none;
+      background-color: #0284c7;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
     }
-    .results {
-      display: grid;
-      gap: 12px;
+
+    button:hover {
+      background-color: #0369a1;
     }
-    .stat-box {
-      background: #0f172a;
-      padding: 16px;
-      border-radius: 10px;
-      border: 1px solid #1e293b;
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
-    .stat-label {
-      color: #94a3b8;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 4px;
-    }
-    .stat-value {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #38bdf8;
-    }
-    .hidden {
+
+    .result-container {
+      margin-top: 20px;
       display: none;
     }
-    .error {
-      color: #f87171;
-      font-size: 0.875rem;
-      margin-top: 12px;
+
+    .stat-box {
+      background-color: #0f172a;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #334155;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #f8fafc;
+      margin-top: 4px;
+    }
+
+    .global-counter {
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px dashed #334155;
       text-align: center;
     }
   </style>
 </head>
 <body>
 
-  <!-- Canlı Nüfus Kartı -->
-  <div class="card live-card">
-    <div class="live-badge">
-      <span class="dot"></span> CANLI NÜFUS
-    </div>
-    <div class="live-counter" id="nufusSayac"></div>
-    <p class="subtitle" style="margin-bottom: 0; margin-top: 6px;">Türkiye Anlık Nüfusu</p>
-  </div>
+  <div class="container">
+    <h1>İsim Sorgulama</h1>
 
-  <!-- İsim Sorgulama Kartı -->
-  <div class="card">
-    <h2>İsim Sorgulama</h2>
-    <p class="subtitle">Türkiye ve il bazlı isim istatistikleri</p>
-
-    <div class="input-group">
+    <div class="form-group">
+      <label for="isimInput">İsim</label>
       <input type="text" id="isimInput" placeholder="Örn: Ömer" autocomplete="off">
-      <select id="ilSelect">
-        <option value="1">01 - Adana</option>
-        <option value="2">02 - Adıyaman</option>
-        <option value="3">03 - Afyonkarahisar</option>
-        <option value="4">04 - Ağrı</option>
-        <option value="5">05 - Amasya</option>
-        <option value="6">06 - Ankara</option>
-        <option value="7">07 - Antalya</option>
-        <option value="8">08 - Artvin</option>
-        <option value="9">09 - Aydın</option>
-        <option value="10">10 - Balıkesir</option>
-        <option value="11">11 - Bilecik</option>
-        <option value="12">12 - Bingöl</option>
-        <option value="13">13 - Bitlis</option>
-        <option value="14">14 - Bolu</option>
-        <option value="15">15 - Burdur</option>
-        <option value="16">16 - Bursa</option>
-        <option value="17">17 - Çanakkale</option>
-        <option value="18">18 - Çankırı</option>
-        <option value="19">19 - Çorum</option>
-        <option value="20">20 - Denizli</option>
-        <option value="21">21 - Diyarbakır</option>
-        <option value="22">22 - Edirne</option>
-        <option value="23">23 - Elazığ</option>
-        <option value="24">24 - Erzincan</option>
-        <option value="25">25 - Erzurum</option>
-        <option value="26">26 - Eskişehir</option>
-        <option value="27">27 - Gaziantep</option>
-        <option value="28">28 - Giresun</option>
-        <option value="29">29 - Gümüşhane</option>
-        <option value="30">30 - Hakkari</option>
-        <option value="31">31 - Hatay</option>
-        <option value="32">32 - Isparta</option>
-        <option value="33">33 - Mersin</option>
-        <option value="34" selected>34 - İstanbul</option>
-        <option value="35">35 - İzmir</option>
-        <option value="36">36 - Kars</option>
-        <option value="37">37 - Kastamonu</option>
-        <option value="38">38 - Kayseri</option>
-        <option value="39">39 - Kırklareli</option>
-        <option value="40">40 - Kırşehir</option>
-        <option value="41">41 - Kocaeli</option>
-        <option value="42">42 - Konya</option>
-        <option value="43">43 - Kütahya</option>
-        <option value="44">44 - Malatya</option>
-        <option value="45">45 - Manisa</option>
-        <option value="46">46 - Kahramanmaraş</option>
-        <option value="47">47 - Mardin</option>
-        <option value="48">48 - Muğla</option>
-        <option value="49">49 - Muş</option>
-        <option value="50">50 - Nevşehir</option>
-        <option value="51">51 - Niğde</option>
-        <option value="52">52 - Ordu</option>
-        <option value="53">53 - Rize</option>
-        <option value="54">54 - Sakarya</option>
-        <option value="55">55 - Samsun</option>
-        <option value="56">56 - Siirt</option>
-        <option value="57">57 - Sinop</option>
-        <option value="58">58 - Sivas</option>
-        <option value="59">59 - Tekirdağ</option>
-        <option value="60">60 - Tokat</option>
-        <option value="61">61 - Trabzon</option>
-        <option value="62">62 - Tunceli</option>
-        <option value="63">63 - Şanlıurfa</option>
-        <option value="64">64 - Uşak</option>
-        <option value="65">65 - Van</option>
-        <option value="66">66 - Yozgat</option>
-        <option value="67">67 - Zonguldak</option>
-        <option value="68">68 - Aksaray</option>
-        <option value="69">69 - Bayburt</option>
-        <option value="70">70 - Karaman</option>
-        <option value="71">71 - Kırıkkale</option>
-        <option value="72">72 - Batman</option>
-        <option value="73">73 - Şırnak</option>
-        <option value="74">74 - Bartın</option>
-        <option value="75">75 - Ardahan</option>
-        <option value="76">76 - Iğdır</option>
-        <option value="77">77 - Yalova</option>
-        <option value="78">78 - Karabük</option>
-        <option value="79">79 - Kilis</option>
-        <option value="80">80 - Osmaniye</option>
-        <option value="81">81 - Düzce</option>
-      </select>
-      <button id="sorgulaBtn">Sorgula</button>
-      <button id="whySoyadBtn" class="why-soyad-btn">NEDEN SOYAD SORGU YOK</button>
     </div>
 
-    <div id="soyadInfo" class="soyad-info-box hidden">devlet baba izin vermiyor ki napak</div>
+    <div class="form-group">
+      <label for="ilSelect">İl Seçin</label>
+      <select id="ilSelect">
+        <option value="34">İstanbul (34)</option>
+        <option value="06">Ankara (06)</option>
+        <option value="35">İzmir (35)</option>
+        <option value="01">Adana (01)</option>
+        <option value="02">Adıyaman (02)</option>
+        <option value="03">Afyonkarahisar (03)</option>
+        <option value="04">Ağrı (04)</option>
+        <option value="05">Amasya (05)</option>
+        <option value="07">Antalya (07)</option>
+        <option value="08">Artvin (08)</option>
+        <option value="09">Aydın (09)</option>
+        <option value="10">Balıkesir (10)</option>
+        <option value="11">Bilecik (11)</option>
+        <option value="12">Bingöl (12)</option>
+        <option value="13">Bitlis (13)</option>
+        <option value="14">Bolu (14)</option>
+        <option value="15">Burdur (15)</option>
+        <option value="16">Bursa (16)</option>
+        <option value="17">Çanakkale (17)</option>
+        <option value="18">Çankırı (18)</option>
+        <option value="19">Çorum (19)</option>
+        <option value="20">Denizli (20)</option>
+        <option value="21">Diyarbakır (21)</option>
+        <option value="22">Edirne (22)</option>
+        <option value="23">Elazığ (23)</option>
+        <option value="24">Erzincan (24)</option>
+        <option value="25">Erzurum (25)</option>
+        <option value="26">Eskişehir (26)</option>
+        <option value="27">Gaziantep (27)</option>
+        <option value="28">Giresun (28)</option>
+        <option value="29">Gümüşhane (29)</option>
+        <option value="30">Hakkari (30)</option>
+        <option value="31">Hatay (31)</option>
+        <option value="32">Isparta (32)</option>
+        <option value="33">Mersin (33)</option>
+        <option value="36">Kars (36)</option>
+        <option value="37">Kastamonu (37)</option>
+        <option value="38">Kayseri (38)</option>
+        <option value="39">Kırklareli (39)</option>
+        <option value="40">Kırşehir (40)</option>
+        <option value="41">Kocaeli (41)</option>
+        <option value="42">Konya (42)</option>
+        <option value="43">Kütahya (43)</option>
+        <option value="44">Malatya (44)</option>
+        <option value="45">Manisa (45)</option>
+        <option value="46">Kahramanmaraş (46)</option>
+        <option value="47">Mardin (47)</option>
+        <option value="48">Muğla (48)</option>
+        <option value="49">Muş (49)</option>
+        <option value="50">Nevşehir (50)</option>
+        <option value="51">Niğde (51)</option>
+        <option value="52">Ordu (52)</option>
+        <option value="53">Rize (53)</option>
+        <option value="54">Sakarya (54)</option>
+        <option value="55">Samsun (55)</option>
+        <option value="56">Siirt (56)</option>
+        <option value="57">Sinop (57)</option>
+        <option value="58">Sivas (58)</option>
+        <option value="59">Tekirdağ (59)</option>
+        <option value="60">Tokat (60)</option>
+        <option value="61">Trabzon (61)</option>
+        <option value="62">Tunceli (62)</option>
+        <option value="63">Şanlıurfa (63)</option>
+        <option value="64">Uşak (64)</option>
+        <option value="65">Van (65)</option>
+        <option value="66">Yozgat (66)</option>
+        <option value="67">Zonguldak (67)</option>
+        <option value="68">Aksaray (68)</option>
+        <option value="69">Bayburt (69)</option>
+        <option value="70">Karaman (70)</option>
+        <option value="71">Kırıkkale (71)</option>
+        <option value="72">Batman (72)</option>
+        <option value="73">Şırnak (73)</option>
+        <option value="74">Bartın (74)</option>
+        <option value="75">Ardahan (75)</option>
+        <option value="76">Iğdır (76)</option>
+        <option value="77">Yalova (77)</option>
+        <option value="78">Karabük (78)</option>
+        <option value="79">Kilis (79)</option>
+        <option value="80">Osmaniye (80)</option>
+        <option value="81">Düzce (81)</option>
+      </select>
+    </div>
 
-    <div id="loading" class="hidden" style="text-align: center; color: #94a3b8;">Aranıyor...</div>
-    <div id="error" class="error hidden"></div>
+    <button id="sorgulaBtn" onclick="sorgula()">SORGULA</button>
 
-    <div id="results" class="results hidden">
+    <div class="result-container" id="sonucKutusu">
       <div class="stat-box">
         <div class="stat-label">Sorgulanan İsim</div>
-        <div class="stat-value" id="resIsim" style="color: #fff;">-</div>
+        <div class="stat-value" id="resIsim">-</div>
       </div>
       <div class="stat-box">
-        <div class="stat-label" id="resIlEtiket">Seçilen İl Kişi Sayısı</div>
-        <div class="stat-value" id="resIl">-</div>
+        <div class="stat-label">Seçilen İldeki Sayı</div>
+        <div class="stat-value" id="resIlToplam">0</div>
       </div>
       <div class="stat-box">
-        <div class="stat-label">Türkiye Genel Sayısı</div>
-        <div class="stat-value" id="resTurkiye">-</div>
+        <div class="stat-label">Türkiye Geneli Sayı</div>
+        <div class="stat-value" id="resTurkiyeToplam">0</div>
       </div>
     </div>
 
-    <!-- Ortak Toplam Sorgu Kutusu -->
-    <div class="stat-box" style="margin-top: 16px; text-align: center;">
+    <div class="global-counter">
       <div class="stat-label">TOPLAM YAPILAN SORGU</div>
-      <div class="stat-value" id="toplamSorguSayac" style="font-size: 1.5rem; color: #38bdf8;">Yükleniyor...</div>
+      <div class="stat-value" id="toplamSorguSayac" style="color: #38bdf8;">Yükleniyor...</div>
     </div>
-
   </div>
 
   <script>
-    // Canlı Nüfus Sayacı
-    const baseNufus = 85372377;
-    const baseDate = new Date('2024-01-01T00:00:00').getTime();
-    const counterEl = document.getElementById('nufusSayac');
-
-    function renderCounterStructure(valStr) {
-      counterEl.innerHTML = '';
-      for (let char of valStr) {
-        if (char === '.' || char === ',') {
-          const sep = document.createElement('span');
-          sep.className = 'separator';
-          sep.innerText = char;
-          counterEl.appendChild(sep);
-        } else {
-          const col = document.createElement('div');
-          col.className = 'digit-col';
-          for (let i = 0; i <= 9; i++) {
-            const s = document.createElement('span');
-            s.innerText = i;
-            col.appendChild(s);
-          }
-          counterEl.appendChild(col);
+    async function ortakSayaciGetir() {
+      try {
+        const res = await fetch('/api/toplam-sorgu');
+        const data = await res.json();
+        if (data.toplam !== undefined) {
+          document.getElementById('toplamSorguSayac').innerText = Number(data.toplam).toLocaleString('tr-TR');
         }
+      } catch (e) {
+        console.error("Sayaç yüklenemedi:", e);
       }
     }
 
-    function updateAnimatedCounter(valStr) {
-      const cols = counterEl.querySelectorAll('.digit-col');
-      const digitsOnly = valStr.replace(/[^0-9]/g, '');
-      
-      if (cols.length !== digitsOnly.length) {
-        renderCounterStructure(valStr);
-        updateAnimatedCounter(valStr);
+    async function sorgula() {
+      const isim = document.getElementById('isimInput').value.trim();
+      const ilKodu = document.getElementById('ilSelect').value;
+      const btn = document.getElementById('sorgulaBtn');
+      const sonucKutusu = document.getElementById('sonucKutusu');
+
+      if (!isim) {
+        alert('Lütfen bir isim girin!');
         return;
       }
 
-      digitsOnly.split('').forEach((digit, idx) => {
-        const num = parseInt(digit, 10);
-        cols[idx].style.transform = `translateY(-${num * 48}px)`;
-      });
-    }
+      btn.disabled = true;
+      btn.innerText = 'Sorgulanıyor...';
 
-    function nufusGuncelle() {
-      const now = new Date().getTime();
-      const diffSeconds = (now - baseDate) / 1000;
-      const artis = Math.floor(diffSeconds / 45); 
-      const guncel = baseNufus + artis;
-      
-      const formatted = guncel.toLocaleString('tr-TR');
-      updateAnimatedCounter(formatted);
-    }
-
-    setInterval(nufusGuncelle, 1000);
-    nufusGuncelle();
-
-    // CANLI SAYAÇ (Abacus API)
-    const namespace = "ismimkactane_projesi_2026";
-    const key = "toplam_sorgu";
-
-    // Sayıyı getirme fonksiyonu
-    async function ortakSayaciGetir() {
       try {
-        const res = await fetch(`https://abacus.jasoncameron.dev/get/${namespace}/${key}`);
-        const data = await res.json();
-        if (data && data.value !== undefined) {
-          document.getElementById('toplamSorguSayac').innerText = Number(data.value).toLocaleString('tr-TR');
+        const response = await fetch(`/api/sorgula?isim=${encodeURIComponent(isim)}&ilKodu=${ilKodu}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          document.getElementById('resIsim').innerText = data.isim;
+          document.getElementById('resIlToplam').innerText = Number(data.ilToplam).toLocaleString('tr-TR');
+          document.getElementById('resTurkiyeToplam').innerText = Number(data.turkiyeToplam).toLocaleString('tr-TR');
+          sonucKutusu.style.display = 'block';
+
+          // Sorgulama bittiğinde ortak sayacı yeniden çekip güncelle
+          ortakSayaciGetir();
+        } else {
+          alert(data.error || 'Bir hata oluştu!');
         }
-      } catch (e) {
-        console.error("Sayaç yükleme hatası:", e);
+      } catch (err) {
+        alert('Sunucuya bağlanırken hata oluştu!');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'SORGULA';
       }
     }
 
-    // Sayıyı 1 artırma fonksiyonu
-    async function ortakSayaciArttir() {
-      try {
-        const res = await fetch(`https://abacus.jasoncameron.dev/hit/${namespace}/${key}`);
-        const data = await res.json();
-        if (data && data.value !== undefined) {
-          document.getElementById('toplamSorguSayac').innerText = Number(data.value).toLocaleString('tr-TR');
-        }
-      } catch (e) {
-        console.error("Sayaç artırma hatası:", e);
-      }
-    }
-
-    // Sayfa ilk yüklendiğinde mevcut ortak sayıyı çek
+    // Sayfa açıldığında ortak sayacı çek
     ortakSayaciGetir();
-
-    // Arayüz Mantığı
-    const whySoyadBtn = document.getElementById('whySoyadBtn');
-    const soyadInfo = document.getElementById('soyadInfo');
-
-    whySoyadBtn.addEventListener('click', () => {
-      soyadInfo.classList.toggle('hidden');
-    });
-
-    const btn = document.getElementById('sorgulaBtn');
-    const input = document.getElementById('isimInput');
-    const ilSelect = document.getElementById('ilSelect');
-    const loading = document.getElementById('loading');
-    const error = document.getElementById('error');
-    const results = document.getElementById('results');
-
-    async function sorgula() {
-      const isim = input.value.trim();
-      const ilKodu = ilSelect.value;
-      const ilAdi = ilSelect.options[ilSelect.selectedIndex].text.split(' - ')[1];
-
-      if (!isim) return;
-
-      error.classList.add('hidden');
-      results.classList.add('hidden');
-      loading.classList.remove('hidden');
-
-      try {
-        const res = await fetch(`/api/sorgula?isim=${encodeURIComponent(isim)}&ilKodu=${ilKodu}`);
-        const data = await res.json();
-
-        loading.classList.add('hidden');
-
-        if (data.error) {
-          error.innerText = data.error;
-          error.classList.remove('hidden');
-          return;
-        }
-
-        document.getElementById('resIsim').innerText = data.isim;
-        document.getElementById('resIlEtiket').innerText = `${ilAdi} Kişi Sayısı`;
-        document.getElementById('resIl').innerText = data.ilToplam.toLocaleString('tr-TR');
-        document.getElementById('resTurkiye').innerText = data.turkiyeToplam.toLocaleString('tr-TR');
-
-        results.classList.remove('hidden');
-        
-        // Sorgulama gerçekleşince ortak sayıyı 1 artır
-        ortakSayaciArttir();
-
-      } catch (e) {
-        loading.classList.add('hidden');
-        error.innerText = 'Bağlantı kurulurken bir hata oluştu.';
-        error.classList.remove('hidden');
-      }
-    }
-
-    btn.addEventListener('click', sorgula);
-    input.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sorgula();
-    });
   </script>
 </body>
 </html>
