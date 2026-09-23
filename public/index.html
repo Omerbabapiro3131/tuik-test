@@ -59,7 +59,6 @@
       box-shadow: 0 0 8px #38bdf8;
     }
     
-    /* Düzeltilmiş Odometer / Sayaç Stilleri */
     .live-counter {
       font-size: 2.25rem;
       font-weight: 800;
@@ -315,9 +314,17 @@
         <div class="stat-value" id="resTurkiye">-</div>
       </div>
     </div>
+
+    <!-- Toplam Yapılan Sorgu Kutusu -->
+    <div class="stat-box" style="margin-top: 16px; text-align: center;">
+      <div class="stat-label">ŞU ANA KADAR YAPILAN SORGU</div>
+      <div class="stat-value" id="toplamSorguSayac" style="font-size: 1.5rem; color: #38bdf8;">0</div>
+    </div>
+
   </div>
 
   <script>
+    // Nüfus Sayacı Mantığı
     const baseNufus = 85372377;
     const baseDate = new Date('2024-01-01T00:00:00').getTime();
     const counterEl = document.getElementById('nufusSayac');
@@ -372,6 +379,28 @@
     setInterval(nufusGuncelle, 1000);
     nufusGuncelle();
 
+    // Toplam Sorgu Sayacı Mantığı (localStorage)
+    const toplamSorguEl = document.getElementById('toplamSorguSayac');
+    
+    function sorguSayisiniYukle() {
+      let kayitliSorgu = localStorage.getItem('toplam_sorgu_sayisi');
+      if (!kayitliSorgu) {
+        kayitliSorgu = 0;
+        localStorage.setItem('toplam_sorgu_sayisi', 0);
+      }
+      toplamSorguEl.innerText = parseInt(kayitliSorgu, 10).toLocaleString('tr-TR');
+    }
+
+    function sorguSayisiniArttir() {
+      let mevcut = parseInt(localStorage.getItem('toplam_sorgu_sayisi') || '0', 10);
+      mevcut += 1;
+      localStorage.setItem('toplam_sorgu_sayisi', mevcut);
+      toplamSorguEl.innerText = mevcut.toLocaleString('tr-TR');
+    }
+
+    sorguSayisiniYukle();
+
+    // Buton Mantığı
     const whySoyadBtn = document.getElementById('whySoyadBtn');
     const soyadInfo = document.getElementById('soyadInfo');
 
@@ -415,6 +444,10 @@
         document.getElementById('resTurkiye').innerText = data.turkiyeToplam.toLocaleString('tr-TR');
 
         results.classList.remove('hidden');
+        
+        // Sorgu başarılı olduğunda sayacı 1 artır
+        sorguSayisiniArttir();
+
       } catch (e) {
         loading.classList.add('hidden');
         error.innerText = 'Bağlantı kurulurken bir hata oluştu.';
