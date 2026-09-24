@@ -259,18 +259,21 @@
       color: #38bdf8;
       font-weight: 600;
     }
-    .capy-close-btn {
+    .capy-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .capy-icon-btn {
       background: none;
       border: none;
       color: #94a3b8;
-      font-size: 1.2rem;
+      font-size: 1rem;
       cursor: pointer;
-      width: auto;
-      padding: 0 4px;
+      padding: 2px 4px;
     }
-    .capy-close-btn:hover {
+    .capy-icon-btn:hover {
       color: #fff;
-      background: none;
     }
     .capy-chat-messages {
       flex: 1;
@@ -316,164 +319,362 @@
       padding: 8px 14px;
       font-size: 0.85rem;
     }
+
+    /* Fullscreen CapyAI Modu (Referans Görsel Tasarımı) */
+    .fullscreen-ai-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(180deg, #eaf8f0 0%, #f4fbf7 100%);
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      color: #2c3e50;
+    }
+    .fs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+    }
+    .fs-logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .fs-logo-area img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .fs-title h2 {
+      font-size: 1.2rem;
+      color: #2e7d32;
+      font-weight: 700;
+      margin-bottom: 0;
+    }
+    .fs-title p {
+      font-size: 0.75rem;
+      color: #666;
+    }
+    .fs-lang-badge {
+      background: #d4edda;
+      color: #155724;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    .fs-back-btn {
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: auto;
+    }
+    .fs-back-btn:hover {
+      background: #1b5e20;
+    }
+    .fs-main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .fs-welcome-box {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .fs-big-logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 16px;
+      border: 3px solid #a5d6a7;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .fs-welcome-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1b5e20;
+      margin-bottom: 8px;
+    }
+    .fs-welcome-sub {
+      font-size: 0.9rem;
+      color: #555;
+      max-width: 500px;
+    }
+    .fs-chat-messages {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .fs-msg {
+      padding: 12px 18px;
+      border-radius: 16px;
+      max-width: 75%;
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+    .fs-msg.bot {
+      background: #ffffff;
+      color: #2c3e50;
+      align-self: flex-start;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid #e0e0e0;
+    }
+    .fs-msg.user {
+      background: #2e7d32;
+      color: #ffffff;
+      align-self: flex-end;
+      box-shadow: 0 2px 8px rgba(46,125,50,0.2);
+    }
+    .fs-input-area {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto 24px auto;
+      padding: 0 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .fs-input-area input {
+      flex: 1;
+      background: #ffffff;
+      border: 1px solid #ccc;
+      color: #333;
+      padding: 14px 20px;
+      border-radius: 24px;
+      font-size: 0.95rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .fs-input-area input:focus {
+      border-color: #2e7d32;
+    }
+    .fs-input-area button {
+      width: auto;
+      background: #2e7d32;
+      color: #fff;
+      border-radius: 24px;
+      padding: 0 24px;
+      font-weight: 600;
+    }
+    .fs-input-area button:hover {
+      background: #1b5e20;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Canlı Nüfus Kartı -->
-  <div class="card live-card">
-    <div class="live-badge">
-      <span class="dot"></span> CANLI NÜFUS
+  <!-- Ana İçerik Kutusu -->
+  <div id="mainSiteContent" style="display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; max-width: 440px;">
+    
+    <!-- Canlı Nüfus Kartı -->
+    <div class="card live-card">
+      <div class="live-badge">
+        <span class="dot"></span> CANLI NÜFUS
+      </div>
+      <div class="live-counter" id="nufusSayac"></div>
+      <p class="subtitle" style="margin-bottom: 0; margin-top: 6px;">Türkiye Anlık Nüfusu</p>
     </div>
-    <div class="live-counter" id="nufusSayac"></div>
-    <p class="subtitle" style="margin-bottom: 0; margin-top: 6px;">Türkiye Anlık Nüfusu</p>
+
+    <!-- İsim Sorgulama Kartı -->
+    <div class="card">
+      <h2>İsim Sorgulama</h2>
+      <p class="subtitle">Türkiye ve il bazlı isim istatistikleri</p>
+
+      <div class="input-group">
+        <input type="text" id="isimInput" placeholder="Örn: Ömer" autocomplete="off">
+        <select id="ilSelect">
+          <option value="1">01 - Adana</option>
+          <option value="2">02 - Adıyaman</option>
+          <option value="3">03 - Afyonkarahisar</option>
+          <option value="4">04 - Ağrı</option>
+          <option value="5">05 - Amasya</option>
+          <option value="6">06 - Ankara</option>
+          <option value="7">07 - Antalya</option>
+          <option value="8">08 - Artvin</option>
+          <option value="9">09 - Aydın</option>
+          <option value="10">10 - Balıkesir</option>
+          <option value="11">11 - Bilecik</option>
+          <option value="12">12 - Bingöl</option>
+          <option value="13">13 - Bitlis</option>
+          <option value="14">14 - Bolu</option>
+          <option value="15">15 - Burdur</option>
+          <option value="16">16 - Bursa</option>
+          <option value="17">17 - Çanakkale</option>
+          <option value="18">18 - Çankırı</option>
+          <option value="19">19 - Çorum</option>
+          <option value="20">20 - Denizli</option>
+          <option value="21">21 - Diyarbakır</option>
+          <option value="22">22 - Edirne</option>
+          <option value="23">23 - Elazığ</option>
+          <option value="24">24 - Erzincan</option>
+          <option value="25">25 - Erzurum</option>
+          <option value="26">26 - Eskişehir</option>
+          <option value="27">27 - Gaziantep</option>
+          <option value="28">28 - Giresun</option>
+          <option value="29">29 - Gümüşhane</option>
+          <option value="30">30 - Hakkari</option>
+          <option value="31">31 - Hatay</option>
+          <option value="32">32 - Isparta</option>
+          <option value="33">33 - Mersin</option>
+          <option value="34" selected>34 - İstanbul</option>
+          <option value="35">35 - İzmir</option>
+          <option value="36">36 - Kars</option>
+          <option value="37">37 - Kastamonu</option>
+          <option value="38">38 - Kayseri</option>
+          <option value="39">39 - Kırklareli</option>
+          <option value="40">40 - Kırşehir</option>
+          <option value="41">41 - Kocaeli</option>
+          <option value="42">42 - Konya</option>
+          <option value="43">43 - Kütahya</option>
+          <option value="44">44 - Malatya</option>
+          <option value="45">45 - Manisa</option>
+          <option value="46">46 - Kahramanmaraş</option>
+          <option value="47">47 - Mardin</option>
+          <option value="48">48 - Muğla</option>
+          <option value="49">49 - Muş</option>
+          <option value="50">50 - Nevşehir</option>
+          <option value="51">51 - Niğde</option>
+          <option value="52">52 - Ordu</option>
+          <option value="53">53 - Rize</option>
+          <option value="54">54 - Sakarya</option>
+          <option value="55">55 - Samsun</option>
+          <option value="56">56 - Siirt</option>
+          <option value="57">57 - Sinop</option>
+          <option value="58">58 - Sivas</option>
+          <option value="59">59 - Tekirdağ</option>
+          <option value="60">60 - Tokat</option>
+          <option value="61">61 - Trabzon</option>
+          <option value="62">62 - Tunceli</option>
+          <option value="63">63 - Şanlıurfa</option>
+          <option value="64">64 - Uşak</option>
+          <option value="65">65 - Van</option>
+          <option value="66">66 - Yozgat</option>
+          <option value="67">67 - Zonguldak</option>
+          <option value="68">68 - Aksaray</option>
+          <option value="69">69 - Bayburt</option>
+          <option value="70">70 - Karaman</option>
+          <option value="71">71 - Kırıkkale</option>
+          <option value="72">72 - Batman</option>
+          <option value="73">73 - Şırnak</option>
+          <option value="74">74 - Bartın</option>
+          <option value="75">75 - Ardahan</option>
+          <option value="76">76 - Iğdır</option>
+          <option value="77">77 - Yalova</option>
+          <option value="78">78 - Karabük</option>
+          <option value="79">79 - Kilis</option>
+          <option value="80">80 - Osmaniye</option>
+          <option value="81">81 - Düzce</option>
+        </select>
+        <button id="sorgulaBtn">Sorgula</button>
+        <button id="whySoyadBtn" class="why-soyad-btn">NEDEN SOYAD SORGU YOK</button>
+      </div>
+
+      <div id="soyadInfo" class="soyad-info-box hidden">devlet baba izin vermiyor ki napak</div>
+
+      <div id="loading" class="hidden" style="text-align: center; color: #94a3b8; margin-bottom: 12px;">Aranıyor...</div>
+      <div id="error" class="error hidden"></div>
+
+      <div id="results" class="results hidden">
+        <div class="stat-box">
+          <div class="stat-label">Sorgulanan İsim</div>
+          <div class="stat-value" id="resIsim" style="color: #fff;">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label" id="resIlEtiket">Seçilen İl Kişi Sayısı</div>
+          <div class="stat-value" id="resIl">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Türkiye Genel Sayısı</div>
+          <div class="stat-value" id="resTurkiye">-</div>
+        </div>
+      </div>
+
+      <!-- Ortak Toplam Sorgu Kutusu -->
+      <div class="stat-box" style="margin-top: 16px; text-align: center;">
+        <div class="stat-label">TOPLAM YAPILAN SORGU</div>
+        <div class="stat-value" id="toplamSorguSayac" style="font-size: 1.5rem; color: #38bdf8;">Yükleniyor...</div>
+      </div>
+
+    </div>
+
+    <!-- Tam Ekran AI Geçiş Butonu -->
+    <button id="openFullscreenBtn" style="background: #10b981; color: #fff; border-radius: 12px; padding: 12px; font-weight: 700; width: 100%;">
+      🚀 Fullscreen CapyAI Moduna Geç
+    </button>
   </div>
 
-  <!-- İsim Sorgulama Kartı -->
-  <div class="card">
-    <h2>İsim Sorgulama</h2>
-    <p class="subtitle">Türkiye ve il bazlı isim istatistikleri</p>
-
-    <div class="input-group">
-      <input type="text" id="isimInput" placeholder="Örn: Ömer" autocomplete="off">
-      <select id="ilSelect">
-        <option value="1">01 - Adana</option>
-        <option value="2">02 - Adıyaman</option>
-        <option value="3">03 - Afyonkarahisar</option>
-        <option value="4">04 - Ağrı</option>
-        <option value="5">05 - Amasya</option>
-        <option value="6">06 - Ankara</option>
-        <option value="7">07 - Antalya</option>
-        <option value="8">08 - Artvin</option>
-        <option value="9">09 - Aydın</option>
-        <option value="10">10 - Balıkesir</option>
-        <option value="11">11 - Bilecik</option>
-        <option value="12">12 - Bingöl</option>
-        <option value="13">13 - Bitlis</option>
-        <option value="14">14 - Bolu</option>
-        <option value="15">15 - Burdur</option>
-        <option value="16">16 - Bursa</option>
-        <option value="17">17 - Çanakkale</option>
-        <option value="18">18 - Çankırı</option>
-        <option value="19">19 - Çorum</option>
-        <option value="20">20 - Denizli</option>
-        <option value="21">21 - Diyarbakır</option>
-        <option value="22">22 - Edirne</option>
-        <option value="23">23 - Elazığ</option>
-        <option value="24">24 - Erzincan</option>
-        <option value="25">25 - Erzurum</option>
-        <option value="26">26 - Eskişehir</option>
-        <option value="27">27 - Gaziantep</option>
-        <option value="28">28 - Giresun</option>
-        <option value="29">29 - Gümüşhane</option>
-        <option value="30">30 - Hakkari</option>
-        <option value="31">31 - Hatay</option>
-        <option value="32">32 - Isparta</option>
-        <option value="33">33 - Mersin</option>
-        <option value="34" selected>34 - İstanbul</option>
-        <option value="35">35 - İzmir</option>
-        <option value="36">36 - Kars</option>
-        <option value="37">37 - Kastamonu</option>
-        <option value="38">38 - Kayseri</option>
-        <option value="39">39 - Kırklareli</option>
-        <option value="40">40 - Kırşehir</option>
-        <option value="41">41 - Kocaeli</option>
-        <option value="42">42 - Konya</option>
-        <option value="43">43 - Kütahya</option>
-        <option value="44">44 - Malatya</option>
-        <option value="45">45 - Manisa</option>
-        <option value="46">46 - Kahramanmaraş</option>
-        <option value="47">47 - Mardin</option>
-        <option value="48">48 - Muğla</option>
-        <option value="49">49 - Muş</option>
-        <option value="50">50 - Nevşehir</option>
-        <option value="51">51 - Niğde</option>
-        <option value="52">52 - Ordu</option>
-        <option value="53">53 - Rize</option>
-        <option value="54">54 - Sakarya</option>
-        <option value="55">55 - Samsun</option>
-        <option value="56">56 - Siirt</option>
-        <option value="57">57 - Sinop</option>
-        <option value="58">58 - Sivas</option>
-        <option value="59">59 - Tekirdağ</option>
-        <option value="60">60 - Tokat</option>
-        <option value="61">61 - Trabzon</option>
-        <option value="62">62 - Tunceli</option>
-        <option value="63">63 - Şanlıurfa</option>
-        <option value="64">64 - Uşak</option>
-        <option value="65">65 - Van</option>
-        <option value="66">66 - Yozgat</option>
-        <option value="67">67 - Zonguldak</option>
-        <option value="68">68 - Aksaray</option>
-        <option value="69">69 - Bayburt</option>
-        <option value="70">70 - Karaman</option>
-        <option value="71">71 - Kırıkkale</option>
-        <option value="72">72 - Batman</option>
-        <option value="73">73 - Şırnak</option>
-        <option value="74">74 - Bartın</option>
-        <option value="75">75 - Ardahan</option>
-        <option value="76">76 - Iğdır</option>
-        <option value="77">77 - Yalova</option>
-        <option value="78">78 - Karabük</option>
-        <option value="79">79 - Kilis</option>
-        <option value="80">80 - Osmaniye</option>
-        <option value="81">81 - Düzce</option>
-      </select>
-      <button id="sorgulaBtn">Sorgula</button>
-      <button id="whySoyadBtn" class="why-soyad-btn">NEDEN SOYAD SORGU YOK</button>
-    </div>
-
-    <div id="soyadInfo" class="soyad-info-box hidden">devlet baba izin vermiyor ki napak</div>
-
-    <div id="loading" class="hidden" style="text-align: center; color: #94a3b8; margin-bottom: 12px;">Aranıyor...</div>
-    <div id="error" class="error hidden"></div>
-
-    <div id="results" class="results hidden">
-      <div class="stat-box">
-        <div class="stat-label">Sorgulanan İsim</div>
-        <div class="stat-value" id="resIsim" style="color: #fff;">-</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label" id="resIlEtiket">Seçilen İl Kişi Sayısı</div>
-        <div class="stat-value" id="resIl">-</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">Türkiye Genel Sayısı</div>
-        <div class="stat-value" id="resTurkiye">-</div>
-      </div>
-    </div>
-
-    <!-- Ortak Toplam Sorgu Kutusu -->
-    <div class="stat-box" style="margin-top: 16px; text-align: center;">
-      <div class="stat-label">TOPLAM YAPILAN SORGU</div>
-      <div class="stat-value" id="toplamSorguSayac" style="font-size: 1.5rem; color: #38bdf8;">Yükleniyor...</div>
-    </div>
-
-  </div>
-
-  <!-- CapyAI Butonu -->
+  <!-- CapyAI Widget Butonu -->
   <div class="capy-widget-btn" id="capyBtn">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkHzh7bJL9ALVhDZvEQ2TPmdvobIT_SWwyXmnVJP11sQ&s=10" alt="CapyAI">
+    <img src="poçi logo.png" alt="CapyAI Logo">
   </div>
 
-  <!-- CapyAI Chat Penceresi -->
+  <!-- CapyAI Chat Penceresi (Widget) -->
   <div class="capy-chat-box hidden" id="capyChatWindow">
     <div class="capy-chat-header">
       <div class="capy-header-info">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkHzh7bJL9ALVhDZvEQ2TPmdvobIT_SWwyXmnVJP11sQ&s=10" alt="CapyAI Logo">
+        <img src="poçi logo.png" alt="CapyAI Logo">
         <div class="capy-header-text">
-          <h3>CapyAi</h3>
-          <p>SELAM BENİ HATIRLADIN MI</p>
+          <h3>CapyAI</h3>
+          <p>Yapay Zeka Asistanı</p>
         </div>
       </div>
-      <button class="capy-close-btn" id="capyCloseBtn">&times;</button>
+      <div class="capy-header-actions">
+        <button class="capy-icon-btn" id="capyExpandBtn" title="Tam Ekran Yap">⛶</button>
+        <button class="capy-close-btn" id="capyCloseBtn">&times;</button>
+      </div>
     </div>
     <div class="capy-chat-messages" id="capyMessages">
-      <div class="capy-msg bot">Selam dostum! Ben CapyAi. Yapımcım Ömer Kayıran beni eskiden çöpe atmıştı ama şimdi daha komik ve biraz da şapşal bir halimle geri döndüm! Ne konuşuyoruz?</div>
+      <div class="capy-msg bot">Selam dostum! Ben yenilenen ve süper zeki hale gelen CapyAI. Nasıl yardımcı olabilirim?</div>
     </div>
     <div class="capy-chat-input-area">
       <input type="text" id="capyInput" placeholder="Bir şeyler yaz..." autocomplete="off">
       <button id="capySendBtn">Gönder</button>
+    </div>
+  </div>
+
+  <!-- Fullscreen CapyAI Modu (Gizli Başlar) -->
+  <div class="fullscreen-ai-container hidden" id="fullscreenAiView">
+    <div class="fs-header">
+      <div class="fs-logo-area">
+        <img src="poçi logo.png" alt="CapyAI Logo">
+        <div class="fs-title">
+          <h2>CapyAI</h2>
+          <p>Kod ve Sohbet Asistanı</p>
+        </div>
+        <span class="fs-lang-badge">Tespit Edilen Dil: <b>Türkçe</b></span>
+      </div>
+      <button class="fs-back-btn" id="closeFullscreenBtn">← Ana Siteye Dön</button>
+    </div>
+
+    <div class="fs-main-content" id="fsMainContent">
+      <div class="fs-welcome-box" id="fsWelcomeBox">
+        <img src="poçi logo.png" alt="Poçi Logo" class="fs-big-logo">
+        <div class="fs-welcome-title">Merhaba! Ben CapyAI. Size nasıl yardımcı olabilirim?</div>
+        <div class="fs-welcome-sub">Kodlama sorularınız veya genel konularda yardım almak için mesaj yazabilirsiniz.</div>
+      </div>
+
+      <div class="fs-chat-messages" id="fsMessages"></div>
+    </div>
+
+    <div class="fs-input-area">
+      <input type="text" id="fsInput" placeholder="Mesajınızı yazın..." autocomplete="off">
+      <button id="fsSendBtn">Gönder</button>
     </div>
   </div>
 
@@ -607,13 +808,23 @@
       if (e.key === 'Enter') sorgula();
     });
 
-    // CapyAI Entegrasyonu
+    // CapyAI Entegrasyonu Ve Hafıza Yönetimi
     const capyBtn = document.getElementById('capyBtn');
     const capyChatWindow = document.getElementById('capyChatWindow');
     const capyCloseBtn = document.getElementById('capyCloseBtn');
+    const capyExpandBtn = document.getElementById('capyExpandBtn');
     const capyInput = document.getElementById('capyInput');
     const capySendBtn = document.getElementById('capySendBtn');
     const capyMessages = document.getElementById('capyMessages');
+
+    const fullscreenAiView = document.getElementById('fullscreenAiView');
+    const closeFullscreenBtn = document.getElementById('closeFullscreenBtn');
+    const openFullscreenBtn = document.getElementById('openFullscreenBtn');
+    const fsInput = document.getElementById('fsInput');
+    const fsSendBtn = document.getElementById('fsSendBtn');
+    const fsMessages = document.getElementById('fsMessages');
+    const fsWelcomeBox = document.getElementById('fsWelcomeBox');
+    const fsMainContent = document.getElementById('fsMainContent');
 
     const GROQ_API_KEY = "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";
 
@@ -625,37 +836,82 @@
       capyChatWindow.classList.add('hidden');
     });
 
-    // Yapay Zekanın Kişiliği ve Hafıza Yapısı
+    // Tam Ekran Moda Geçiş
+    function openFullscreenMode() {
+      fullscreenAiView.classList.remove('hidden');
+      capyChatWindow.classList.add('hidden');
+      renderAllMessages();
+    }
+
+    function closeFullscreenMode() {
+      fullscreenAiView.classList.add('hidden');
+    }
+
+    capyExpandBtn.addEventListener('click', openFullscreenMode);
+    openFullscreenBtn.addEventListener('click', openFullscreenMode);
+    closeFullscreenBtn.addEventListener('click', closeFullscreenMode);
+
+    // Zeki ve Hafızası Yüksek Yapay Zeka Kişiliği
     let chatHistory = [
       {
         role: "system",
-        content: "Sen CapyAi adında bir yapay zekasın. Yapımcının adı Ömer Kayıran. Seni eskiden yaptı fakat senden 20 dolar haraç/ücret istedikleri için seni çöpe attı/sildi. Daha sonra seni daha şapşal, esprili, hafif mal ama çok komik ve sevimli bir versiyonunla tekrar piyasaya sürdü. Sen bunu gayet iyi biliyorsun ve biri sorunca ya da yeri geldiğinde '20 dolar haraç istediler diye çöpe atıldım' diyerek bununla dalga geçiyorsun. Sohbet geçmişindeki tüm detayları eksiksiz hatırla, kullanıcı bir şey anlatıp sonradan 'bunu açıkla' dediğinde en son ne konuştuğunuzu çok iyi bilerek cevap ver. Türkçe ve capybara tadında samimi konuş."
+        content: "Sen CapyAI adında son derece zeki, kültürlü, pratik zekalı ve mizah yeteneği yüksek bir yapay zeka asistanısın. Yapımcın Ömer Kayıran. Geçmişte yaşanan olayları gayet iyi biliyorsun. Sohbet boyunca kullanıcının söylediği HER detay ve önceden konuştuğunuz TÜM mesajlar geçmişte eksiksiz yer alır. Kullanıcı 'geçmişte ne dedik' ya da 'şunu açıkla' dediğinde tüm geçmişi mükemmel hatırla ve akıllıca yanıtlar ver. Asla aptalca cevaplar verme; lafı gediğine oturtan, samimi ve son derece bilgili bir dille Türkçe konuş."
       }
     ];
 
-    async function sendCapyMessage() {
-      const text = capyInput.value.trim();
-      if (!text) return;
+    function renderAllMessages() {
+      // Hem widget hem de fullscreen ekranındaki mesaj kutularını senkronize günceller
+      capyMessages.innerHTML = '';
+      fsMessages.innerHTML = '';
 
-      const userMsgDiv = document.createElement('div');
-      userMsgDiv.className = 'capy-msg user';
-      userMsgDiv.innerText = text;
-      capyMessages.appendChild(userMsgDiv);
+      const userAndBotMsgs = chatHistory.filter(m => m.role !== 'system');
 
-      capyInput.value = '';
+      if (userAndBotMsgs.length > 0) {
+        fsWelcomeBox.classList.add('hidden');
+      } else {
+        fsWelcomeBox.classList.remove('hidden');
+      }
+
+      userAndBotMsgs.forEach(msg => {
+        // Widget Mesajı
+        const wDiv = document.createElement('div');
+        wDiv.className = `capy-msg ${msg.role === 'user' ? 'user' : 'bot'}`;
+        wDiv.innerText = msg.content;
+        capyMessages.appendChild(wDiv);
+
+        // Fullscreen Mesajı
+        const fsDiv = document.createElement('div');
+        fsDiv.className = `fs-msg ${msg.role === 'user' ? 'user' : 'bot'}`;
+        fsDiv.innerText = msg.content;
+        fsMessages.appendChild(fsDiv);
+      });
+
       capyMessages.scrollTop = capyMessages.scrollHeight;
+      fsMainContent.scrollTop = fsMainContent.scrollHeight;
+    }
+
+    async function processSendMessage(text) {
+      if (!text) return;
 
       // Kullanıcı mesajını geçmişe ekle
       chatHistory.push({ role: "user", content: text });
+      renderAllMessages();
 
-      const loadingMsgDiv = document.createElement('div');
-      loadingMsgDiv.className = 'capy-msg bot';
-      loadingMsgDiv.innerText = 'Düşünüyor...';
-      capyMessages.appendChild(loadingMsgDiv);
+      // Düşünüyor Mesajı Göster
+      const wLoading = document.createElement('div');
+      wLoading.className = 'capy-msg bot';
+      wLoading.innerText = 'Düşünüyor...';
+      capyMessages.appendChild(wLoading);
+
+      const fsLoading = document.createElement('div');
+      fsLoading.className = 'fs-msg bot';
+      fsLoading.innerText = 'Düşünüyor...';
+      fsMessages.appendChild(fsLoading);
+
       capyMessages.scrollTop = capyMessages.scrollHeight;
+      fsMainContent.scrollTop = fsMainContent.scrollHeight;
 
       try {
-        // Düzeltilmiş Endpoint adresi
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
           method: 'POST',
           headers: {
@@ -669,38 +925,48 @@
         });
 
         const data = await response.json();
-        capyMessages.removeChild(loadingMsgDiv);
 
         if (data.choices && data.choices[0] && data.choices[0].message) {
           const reply = data.choices[0].message.content;
-          
-          // Yanıtı hafızaya/geçmişe kaydet
           chatHistory.push({ role: "assistant", content: reply });
-
-          const botMsgDiv = document.createElement('div');
-          botMsgDiv.className = 'capy-msg bot';
-          botMsgDiv.innerText = reply;
-          capyMessages.appendChild(botMsgDiv);
         } else {
-          const errorMsgDiv = document.createElement('div');
-          errorMsgDiv.className = 'capy-msg bot';
-          errorMsgDiv.innerText = 'Bir yanıt alınamadı.';
-          capyMessages.appendChild(errorMsgDiv);
+          chatHistory.push({ role: "assistant", content: 'Bir yanıt alınamadı.' });
         }
       } catch (err) {
-        capyMessages.removeChild(loadingMsgDiv);
-        const errorMsgDiv = document.createElement('div');
-        errorMsgDiv.className = 'capy-msg bot';
-        errorMsgDiv.innerText = 'Bağlantı hatası oluştu.';
-        capyMessages.appendChild(errorMsgDiv);
+        chatHistory.push({ role: "assistant", content: 'Bağlantı hatası oluştu.' });
       }
 
-      capyMessages.scrollTop = capyMessages.scrollHeight;
+      renderAllMessages();
     }
 
-    capySendBtn.addEventListener('click', sendCapyMessage);
+    // Widget Gönderim
+    capySendBtn.addEventListener('click', () => {
+      const txt = capyInput.value.trim();
+      capyInput.value = '';
+      processSendMessage(txt);
+    });
+
     capyInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendCapyMessage();
+      if (e.key === 'Enter') {
+        const txt = capyInput.value.trim();
+        capyInput.value = '';
+        processSendMessage(txt);
+      }
+    });
+
+    // Fullscreen Gönderim
+    fsSendBtn.addEventListener('click', () => {
+      const txt = fsInput.value.trim();
+      fsInput.value = '';
+      processSendMessage(txt);
+    });
+
+    fsInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const txt = fsInput.value.trim();
+        fsInput.value = '';
+        processSendMessage(txt);
+      }
     });
   </script>
 </body>
