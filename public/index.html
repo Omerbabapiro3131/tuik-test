@@ -185,7 +185,6 @@
       text-align: center;
     }
 
-    /* Sol Alt Capybara Butonu */
     .capy-widget-btn {
       position: fixed;
       bottom: 20px;
@@ -214,7 +213,6 @@
       object-fit: cover;
     }
 
-    /* CapyAI Chat Penceresi */
     .capy-chat-box {
       position: fixed;
       bottom: 90px;
@@ -320,7 +318,6 @@
       font-size: 0.85rem;
     }
 
-    /* Fullscreen CapyAI Modu (Referans Görsel Tasarımı) */
     .fullscreen-ai-container {
       position: fixed;
       top: 0;
@@ -479,10 +476,8 @@
 </head>
 <body>
 
-  <!-- Ana İçerik Kutusu -->
   <div id="mainSiteContent" style="display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; max-width: 440px;">
     
-    <!-- Canlı Nüfus Kartı -->
     <div class="card live-card">
       <div class="live-badge">
         <span class="dot"></span> CANLI NÜFUS
@@ -491,7 +486,6 @@
       <p class="subtitle" style="margin-bottom: 0; margin-top: 6px;">Türkiye Anlık Nüfusu</p>
     </div>
 
-    <!-- İsim Sorgulama Kartı -->
     <div class="card">
       <h2>İsim Sorgulama</h2>
       <p class="subtitle">Türkiye ve il bazlı isim istatistikleri</p>
@@ -605,7 +599,6 @@
         </div>
       </div>
 
-      <!-- Ortak Toplam Sorgu Kutusu -->
       <div class="stat-box" style="margin-top: 16px; text-align: center;">
         <div class="stat-label">TOPLAM YAPILAN SORGU</div>
         <div class="stat-value" id="toplamSorguSayac" style="font-size: 1.5rem; color: #38bdf8;">Yükleniyor...</div>
@@ -613,22 +606,19 @@
 
     </div>
 
-    <!-- Tam Ekran AI Geçiş Butonu -->
     <button id="openFullscreenBtn" style="background: #10b981; color: #fff; border-radius: 12px; padding: 12px; font-weight: 700; width: 100%;">
-      🚀 Fullscreen CapyAI Moduna Geç
+      Fullscreen CapyAI Moduna Geç
     </button>
   </div>
 
-  <!-- CapyAI Widget Butonu -->
   <div class="capy-widget-btn" id="capyBtn">
-    <img src="poçi logo.png" alt="CapyAI Logo">
+    <img src="https://i.imgur.com/6D7DUep.png" alt="CapyAI Logo">
   </div>
 
-  <!-- CapyAI Chat Penceresi (Widget) -->
   <div class="capy-chat-box hidden" id="capyChatWindow">
     <div class="capy-chat-header">
       <div class="capy-header-info">
-        <img src="poçi logo.png" alt="CapyAI Logo">
+        <img src="https://i.imgur.com/6D7DUep.png" alt="CapyAI Logo">
         <div class="capy-header-text">
           <h3>CapyAI</h3>
           <p>Yapay Zeka Asistanı</p>
@@ -648,11 +638,10 @@
     </div>
   </div>
 
-  <!-- Fullscreen CapyAI Modu (Gizli Başlar) -->
   <div class="fullscreen-ai-container hidden" id="fullscreenAiView">
     <div class="fs-header">
       <div class="fs-logo-area">
-        <img src="poçi logo.png" alt="CapyAI Logo">
+        <img src="https://i.imgur.com/6D7DUep.png" alt="CapyAI Logo">
         <div class="fs-title">
           <h2>CapyAI</h2>
           <p>Kod ve Sohbet Asistanı</p>
@@ -664,7 +653,7 @@
 
     <div class="fs-main-content" id="fsMainContent">
       <div class="fs-welcome-box" id="fsWelcomeBox">
-        <img src="poçi logo.png" alt="Poçi Logo" class="fs-big-logo">
+        <img src="https://i.imgur.com/6D7DUep.png" alt="CapyAI Logo" class="fs-big-logo">
         <div class="fs-welcome-title">Merhaba! Ben CapyAI. Size nasıl yardımcı olabilirim?</div>
         <div class="fs-welcome-sub">Kodlama sorularınız veya genel konularda yardım almak için mesaj yazabilirsiniz.</div>
       </div>
@@ -679,7 +668,6 @@
   </div>
 
   <script>
-    // Canlı Nüfus Sayacı
     const baseNufus = 85372377;
     const baseDate = new Date('2024-01-01T00:00:00').getTime();
     const counterEl = document.getElementById('nufusSayac');
@@ -734,7 +722,6 @@
     setInterval(nufusGuncelle, 1000);
     nufusGuncelle();
 
-    // Supabase Ortak Sayaç
     async function ortakSayaciGetir() {
       try {
         const res = await fetch('/api/toplam-sorgu');
@@ -743,13 +730,11 @@
           document.getElementById('toplamSorguSayac').innerText = Number(data.toplam).toLocaleString('tr-TR');
         }
       } catch (e) {
-        console.error("Sayaç yükleme hatası:", e);
       }
     }
 
     ortakSayaciGetir();
 
-    // Arayüz Mantığı
     const whySoyadBtn = document.getElementById('whySoyadBtn');
     const soyadInfo = document.getElementById('soyadInfo');
 
@@ -808,7 +793,6 @@
       if (e.key === 'Enter') sorgula();
     });
 
-    // CapyAI Entegrasyonu Ve Hafıza Yönetimi (Pollinations AI Sınırsız & Ücretsiz API)
     const capyBtn = document.getElementById('capyBtn');
     const capyChatWindow = document.getElementById('capyChatWindow');
     const capyCloseBtn = document.getElementById('capyCloseBtn');
@@ -834,7 +818,6 @@
       capyChatWindow.classList.add('hidden');
     });
 
-    // Tam Ekran Moda Geçiş
     function openFullscreenMode() {
       fullscreenAiView.classList.remove('hidden');
       capyChatWindow.classList.add('hidden');
@@ -849,7 +832,6 @@
     openFullscreenBtn.addEventListener('click', openFullscreenMode);
     closeFullscreenBtn.addEventListener('click', closeFullscreenMode);
 
-    // Zeki ve Hafızası Yüksek Yapay Zeka Kişiliği
     let chatHistory = [
       {
         role: "system",
@@ -870,13 +852,11 @@
       }
 
       userAndBotMsgs.forEach(msg => {
-        // Widget Mesajı
         const wDiv = document.createElement('div');
         wDiv.className = `capy-msg ${msg.role === 'user' ? 'user' : 'bot'}`;
         wDiv.innerText = msg.content;
         capyMessages.appendChild(wDiv);
 
-        // Fullscreen Mesajı
         const fsDiv = document.createElement('div');
         fsDiv.className = `fs-msg ${msg.role === 'user' ? 'user' : 'bot'}`;
         fsDiv.innerText = msg.content;
@@ -893,7 +873,6 @@
       chatHistory.push({ role: "user", content: text });
       renderAllMessages();
 
-      // Düşünüyor Mesajı Göster
       const wLoading = document.createElement('div');
       wLoading.className = 'capy-msg bot';
       wLoading.innerText = 'Düşünüyor...';
@@ -934,7 +913,6 @@
       renderAllMessages();
     }
 
-    // Widget Gönderim
     capySendBtn.addEventListener('click', () => {
       const txt = capyInput.value.trim();
       capyInput.value = '';
@@ -949,7 +927,6 @@
       }
     });
 
-    // Fullscreen Gönderim
     fsSendBtn.addEventListener('click', () => {
       const txt = fsInput.value.trim();
       fsInput.value = '';
