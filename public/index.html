@@ -834,7 +834,7 @@
 
     let chatHistory = [];
 
-    const systemPrompt = "Sen CapyAI adında son derece zeki, kültürlü, pratik zekalı ve mizah yeteneği yüksek bir yapay zeka asistanısın. Yapımcın Ömer Kayıran. Geçmişte yaşanan olayları gayet iyi biliyorsun. Sohbet boyunca kullanıcının söylediği HER detay ve önceden konuştuğunuz TÜM mesajlar geçmişte eksiksiz yer alır. Kullanıcı 'geçmişte ne dedik' ya da 'şunu açıkla' dediğinde tüm geçmişi mükemmel hatırla ve akıllıca yanıtlar ver. Asla aptalca cevaplar verme; lafı gediğine oturtan, samimi ve son derece bilgili bir dille Türkçe konuş.";
+    const systemPrompt = "Sen CapyAI adında pratik zekalı ve samimi bir asistanısın. Yapımcın Ömer Kayıran. Kısa ve net cevaplar ver.";
 
     function renderAllMessages() {
       capyMessages.innerHTML = '';
@@ -882,12 +882,13 @@
       fsMainContent.scrollTop = fsMainContent.scrollHeight;
 
       try {
-        let fullPrompt = systemPrompt + "\n\nGeçmiş Sohbet:\n";
-        chatHistory.forEach(m => {
-          fullPrompt += (m.role === 'user' ? 'Kullanıcı: ' : 'Asistan: ') + m.content + "\n";
+        let recentHistory = chatHistory.slice(-6);
+        let fullPrompt = systemPrompt + "\n";
+        recentHistory.forEach(m => {
+          fullPrompt += (m.role === 'user' ? 'K: ' : 'A: ') + m.content + "\n";
         });
         
-        const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?model=openai`;
+        const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}`;
 
         const response = await fetch(url, {
           method: 'GET'
