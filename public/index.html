@@ -888,7 +888,7 @@
           fullPrompt += (m.role === 'user' ? 'K: ' : 'A: ') + m.content + "\n";
         });
         
-        const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?model=deepseek/deepseek-v4.1-flash`;
+        const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?model=openai`;
 
         const response = await fetch(url, {
           method: 'GET'
