@@ -469,7 +469,7 @@
       <button class="capy-close-btn" id="capyCloseBtn">&times;</button>
     </div>
     <div class="capy-chat-messages" id="capyMessages">
-      <div class="capy-msg bot">Selam dostum! Ben CapyAi. Sana nasıl yardımcı olabilirim?</div>
+      <div class="capy-msg bot">Selam dostum! Ben CapyAi. Yapımcım Ömer Kayıran beni eskiden çöpe atmıştı ama şimdi daha komik ve biraz da şapşal bir halimle geri döndüm! Ne konuşuyoruz?</div>
     </div>
     <div class="capy-chat-input-area">
       <input type="text" id="capyInput" placeholder="Bir şeyler yaz..." autocomplete="off">
@@ -592,7 +592,7 @@
         document.getElementById('resTurkiye').innerText = data.turkiyeToplam.toLocaleString('tr-TR');
 
         results.classList.remove('hidden');
-        
+
         ortakSayaciGetir();
 
       } catch (e) {
@@ -625,10 +625,11 @@
       capyChatWindow.classList.add('hidden');
     });
 
+    // Yapay Zekanın Kişiliği ve Hafıza Yapısı
     let chatHistory = [
       {
         role: "system",
-        content: "Sen CapyAi adında çok sevimli, sakin, dost canlısı, esprili ve konuşmalarında arada bir capybara (su domuzu) hissini hissettiren yardımcı bir yapay zeka asistanısın. Türkçe konuşuyorsun."
+        content: "Sen CapyAi adında bir yapay zekasın. Yapımcının adı Ömer Kayıran. Seni eskiden yaptı fakat beğenmeyip çöpe attı/sildi. Daha sonra seni daha şapşal, esprili, hafif mal ama çok komik ve sevimli bir versiyonunla tekrar piyasaya sürdü. Sen bunu gayet iyi biliyorsun ve yeri geldiğinde bununla dalga geçiyorsun. Sohbet geçmişindeki tüm detayları eksiksiz hatırla, kullanıcı bir şey anlatıp sonradan 'bunu açıkla' dediğinde en son ne konuştuğunuzu çok iyi bilerek cevap ver. Türkçe ve capybara tadında samimi konuş."
       }
     ];
 
@@ -644,6 +645,7 @@
       capyInput.value = '';
       capyMessages.scrollTop = capyMessages.scrollHeight;
 
+      // Kullanıcı mesajını geçmişe ekle
       chatHistory.push({ role: "user", content: text });
 
       const loadingMsgDiv = document.createElement('div');
@@ -653,6 +655,7 @@
       capyMessages.scrollTop = capyMessages.scrollHeight;
 
       try {
+        // Düzeltilmiş Endpoint adresi
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
           method: 'POST',
           headers: {
@@ -670,6 +673,8 @@
 
         if (data.choices && data.choices[0] && data.choices[0].message) {
           const reply = data.choices[0].message.content;
+          
+          // Yanıtı hafızaya/geçmişe kaydet
           chatHistory.push({ role: "assistant", content: reply });
 
           const botMsgDiv = document.createElement('div');
