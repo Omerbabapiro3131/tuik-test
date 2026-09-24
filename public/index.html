@@ -176,13 +176,145 @@
       color: #38bdf8;
     }
     .hidden {
-      display: none;
+      display: none !important;
     }
     .error {
       color: #f87171;
       font-size: 0.875rem;
       margin-top: 12px;
       text-align: center;
+    }
+
+    /* Sol Alt Capybara Butonu */
+    .capy-widget-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #1e293b;
+      border: 2px solid #38bdf8;
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+      cursor: pointer;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .capy-widget-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+    }
+    .capy-widget-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* CapyAI Chat Penceresi */
+    .capy-chat-box {
+      position: fixed;
+      bottom: 90px;
+      left: 20px;
+      width: 340px;
+      height: 460px;
+      background: #1e293b;
+      border: 1px solid #38bdf8;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .capy-chat-header {
+      background: #0f172a;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #334155;
+    }
+    .capy-header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .capy-header-info img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid #38bdf8;
+      object-fit: cover;
+    }
+    .capy-header-text h3 {
+      font-size: 0.95rem;
+      color: #fff;
+    }
+    .capy-header-text p {
+      font-size: 0.7rem;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+    .capy-close-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.2rem;
+      cursor: pointer;
+      width: auto;
+      padding: 0 4px;
+    }
+    .capy-close-btn:hover {
+      color: #fff;
+      background: none;
+    }
+    .capy-chat-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.85rem;
+    }
+    .capy-msg {
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .capy-msg.bot {
+      background: #0f172a;
+      color: #f8fafc;
+      align-self: flex-start;
+      border: 1px solid #334155;
+    }
+    .capy-msg.user {
+      background: #38bdf8;
+      color: #0f172a;
+      align-self: flex-end;
+      font-weight: 500;
+    }
+    .capy-chat-input-area {
+      padding: 10px;
+      background: #0f172a;
+      border-top: 1px solid #334155;
+      display: flex;
+      gap: 8px;
+    }
+    .capy-chat-input-area input {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+    .capy-chat-input-area button {
+      width: auto;
+      padding: 8px 14px;
+      font-size: 0.85rem;
     }
   </style>
 </head>
@@ -319,6 +451,32 @@
 
   </div>
 
+  <!-- CapyAI Butonu -->
+  <div class="capy-widget-btn" id="capyBtn">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkHzh7bJL9ALVhDZvEQ2TPmdvobIT_SWwyXmnVJP11sQ&s=10" alt="CapyAI">
+  </div>
+
+  <!-- CapyAI Chat Penceresi -->
+  <div class="capy-chat-box hidden" id="capyChatWindow">
+    <div class="capy-chat-header">
+      <div class="capy-header-info">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkHzh7bJL9ALVhDZvEQ2TPmdvobIT_SWwyXmnVJP11sQ&s=10" alt="CapyAI Logo">
+        <div class="capy-header-text">
+          <h3>CapyAi</h3>
+          <p>SELAM BENİ HATIRLADIN MI</p>
+        </div>
+      </div>
+      <button class="capy-close-btn" id="capyCloseBtn">&times;</button>
+    </div>
+    <div class="capy-chat-messages" id="capyMessages">
+      <div class="capy-msg bot">Selam dostum! Ben CapyAi. Sana nasıl yardımcı olabilirim?</div>
+    </div>
+    <div class="capy-chat-input-area">
+      <input type="text" id="capyInput" placeholder="Bir şeyler yaz..." autocomplete="off">
+      <button id="capySendBtn">Gönder</button>
+    </div>
+  </div>
+
   <script>
     // Canlı Nüfus Sayacı
     const baseNufus = 85372377;
@@ -435,7 +593,6 @@
 
         results.classList.remove('hidden');
         
-        // Sorgulama başarılı olunca backend sayacı artırır, güncel sayıyı çekiyoruz
         ortakSayaciGetir();
 
       } catch (e) {
@@ -448,6 +605,97 @@
     btn.addEventListener('click', sorgula);
     input.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') sorgula();
+    });
+
+    // CapyAI Entegrasyonu
+    const capyBtn = document.getElementById('capyBtn');
+    const capyChatWindow = document.getElementById('capyChatWindow');
+    const capyCloseBtn = document.getElementById('capyCloseBtn');
+    const capyInput = document.getElementById('capyInput');
+    const capySendBtn = document.getElementById('capySendBtn');
+    const capyMessages = document.getElementById('capyMessages');
+
+    const GROQ_API_KEY = "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";
+
+    capyBtn.addEventListener('click', () => {
+      capyChatWindow.classList.toggle('hidden');
+    });
+
+    capyCloseBtn.addEventListener('click', () => {
+      capyChatWindow.classList.add('hidden');
+    });
+
+    let chatHistory = [
+      {
+        role: "system",
+        content: "Sen CapyAi adında çok sevimli, sakin, dost canlısı, esprili ve konuşmalarında arada bir capybara (su domuzu) hissini hissettiren yardımcı bir yapay zeka asistanısın. Türkçe konuşuyorsun."
+      }
+    ];
+
+    async function sendCapyMessage() {
+      const text = capyInput.value.trim();
+      if (!text) return;
+
+      const userMsgDiv = document.createElement('div');
+      userMsgDiv.className = 'capy-msg user';
+      userMsgDiv.innerText = text;
+      capyMessages.appendChild(userMsgDiv);
+
+      capyInput.value = '';
+      capyMessages.scrollTop = capyMessages.scrollHeight;
+
+      chatHistory.push({ role: "user", content: text });
+
+      const loadingMsgDiv = document.createElement('div');
+      loadingMsgDiv.className = 'capy-msg bot';
+      loadingMsgDiv.innerText = 'Düşünüyor...';
+      capyMessages.appendChild(loadingMsgDiv);
+      capyMessages.scrollTop = capyMessages.scrollHeight;
+
+      try {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GROQ_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: "llama-3.3-70b-versatile",
+            messages: chatHistory
+          })
+        });
+
+        const data = await response.json();
+        capyMessages.removeChild(loadingMsgDiv);
+
+        if (data.choices && data.choices[0] && data.choices[0].message) {
+          const reply = data.choices[0].message.content;
+          chatHistory.push({ role: "assistant", content: reply });
+
+          const botMsgDiv = document.createElement('div');
+          botMsgDiv.className = 'capy-msg bot';
+          botMsgDiv.innerText = reply;
+          capyMessages.appendChild(botMsgDiv);
+        } else {
+          const errorMsgDiv = document.createElement('div');
+          errorMsgDiv.className = 'capy-msg bot';
+          errorMsgDiv.innerText = 'Bir yanıt alınamadı.';
+          capyMessages.appendChild(errorMsgDiv);
+        }
+      } catch (err) {
+        capyMessages.removeChild(loadingMsgDiv);
+        const errorMsgDiv = document.createElement('div');
+        errorMsgDiv.className = 'capy-msg bot';
+        errorMsgDiv.innerText = 'Bağlantı hatası oluştu.';
+        capyMessages.appendChild(errorMsgDiv);
+      }
+
+      capyMessages.scrollTop = capyMessages.scrollHeight;
+    }
+
+    capySendBtn.addEventListener('click', sendCapyMessage);
+    capyInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendCapyMessage();
     });
   </script>
 </body>
