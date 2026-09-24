@@ -888,7 +888,7 @@
           fullPrompt += (m.role === 'user' ? 'K: ' : 'A: ') + m.content + "\n";
         });
         
-        const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?model=kimi`;
+        const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?model=moonshotai/kimi-k3`;
 
         const response = await fetch(url, {
           method: 'GET'
