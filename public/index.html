@@ -832,26 +832,21 @@
     openFullscreenBtn.addEventListener('click', openFullscreenMode);
     closeFullscreenBtn.addEventListener('click', closeFullscreenMode);
 
-    let chatHistory = [
-      {
-        role: "system",
-        content: "Sen CapyAI adında son derece zeki, kültürlü, pratik zekalı ve mizah yeteneği yüksek bir yapay zeka asistanısın. Yapımcın Ömer Kayıran. Geçmişte yaşanan olayları gayet iyi biliyorsun. Sohbet boyunca kullanıcının söylediği HER detay ve önceden konuştuğunuz TÜM mesajlar geçmişte eksiksiz yer alır. Kullanıcı 'geçmişte ne dedik' ya da 'şunu açıkla' dediğinde tüm geçmişi mükemmel hatırla ve akıllıca yanıtlar ver. Asla aptalca cevaplar verme; lafı gediğine oturtan, samimi ve son derece bilgili bir dille Türkçe konuş."
-      }
-    ];
+    let chatHistory = [];
+
+    const systemPrompt = "Sen CapyAI adında son derece zeki, kültürlü, pratik zekalı ve mizah yeteneği yüksek bir yapay zeka asistanısın. Yapımcın Ömer Kayıran. Geçmişte yaşanan olayları gayet iyi biliyorsun. Sohbet boyunca kullanıcının söylediği HER detay ve önceden konuştuğunuz TÜM mesajlar geçmişte eksiksiz yer alır. Kullanıcı 'geçmişte ne dedik' ya da 'şunu açıkla' dediğinde tüm geçmişi mükemmel hatırla ve akıllıca yanıtlar ver. Asla aptalca cevaplar verme; lafı gediğine oturtan, samimi ve son derece bilgili bir dille Türkçe konuş.";
 
     function renderAllMessages() {
       capyMessages.innerHTML = '';
       fsMessages.innerHTML = '';
 
-      const userAndBotMsgs = chatHistory.filter(m => m.role !== 'system');
-
-      if (userAndBotMsgs.length > 0) {
+      if (chatHistory.length > 0) {
         fsWelcomeBox.classList.add('hidden');
       } else {
         fsWelcomeBox.classList.remove('hidden');
       }
 
-      userAndBotMsgs.forEach(msg => {
+      chatHistory.forEach(msg => {
         const wDiv = document.createElement('div');
         wDiv.className = `capy-msg ${msg.role === 'user' ? 'user' : 'bot'}`;
         wDiv.innerText = msg.content;
@@ -887,16 +882,15 @@
       fsMainContent.scrollTop = fsMainContent.scrollHeight;
 
       try {
-        const response = await fetch('https://chat.pollinations.ai/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            messages: chatHistory,
-            model: "openai",
-            code: "be3ce38e"
-          })
+        let fullPrompt = systemPrompt + "\n\nGeçmiş Sohbet:\n";
+        chatHistory.forEach(m => {
+          fullPrompt += (m.role === 'user' ? 'Kullanıcı: ' : 'Asistan: ') + m.content + "\n";
+        });
+        
+        const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?model=openai`;
+
+        const response = await fetch(url, {
+          method: 'GET'
         });
 
         const reply = await response.text();
